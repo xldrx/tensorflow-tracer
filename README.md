@@ -11,7 +11,7 @@ Some screenshots [here](https://github.com/xldrx/tensorflow-tracer/blob/master/g
 ## Installation
 Use `pip` to install:
 ```bash
-pip install tensorflow-tftracer
+pip install tensorflow-tracer
 ```
 
 ## Quick Start
@@ -56,7 +56,7 @@ http://0.0.0.0:9999
 ``` 
 
 ## API
-Full Documentation is [here]().
+Full Documentation is [here](https://tensorflow-tracer.readthedocs.io/en/latest/).
 
 ## Known Bugs/Limitations
 * Only Python3 is supported.
