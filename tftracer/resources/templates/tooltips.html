@@ -1,0 +1,31 @@
+<div style="max-width: 600px;" class="xl-box">
+    <dl class="uk-description-list">
+        <dt>Name</dt>
+        <dd>@name</dd>
+
+        <dt>op</dt>
+        <dd>@op</dd>
+
+        <dt>Inputs</dt>
+        <dd>
+            <ul style="list-style-type: square;">@inputs{safe}</ul>
+        </dd>
+
+        <dt>Description</dt>
+        <dd>@description</dd>
+    </dl>
+    <div uk-grid>
+        <dl class="uk-description-list">
+            <dt>Elapsed</dt>
+            <dd>@duration <i>ms</i></dd>
+        </dl>
+        <dl class="uk-description-list">
+            <dt>Start</dt>
+            <dd>@start <i>ms</i></dd>
+        </dl>
+        <dl class="uk-description-list">
+            <dt>End</dt>
+            <dd>@end <i>ms</i></dd>
+        </dl>
+    </div>
+</div>

@@ -1,0 +1,277 @@
+<html>
+<head>
+    <style type="text/css">
+        /** {*/
+        /*font-family: "Roboto", sans-serif !important;*/
+        /*}*/
+        .uk-icon > svg:nth-child(2) {
+            display: none;
+        }
+
+        .blink_me {
+            animation: blinker 2s linear infinite;
+        }
+
+        @keyframes blinker {
+            50% {
+                opacity: 0.25;
+            }
+        }
+
+        .list-enter-active,
+        .list-leave-active,
+        .list-move {
+            transition: 500ms cubic-bezier(0.59, 0.12, 0.34, 0.95);
+            transition-property: opacity, transform;
+        }
+
+        .list-enter {
+            opacity: 0;
+            transform: translateX(50px) scaleY(0.5);
+        }
+
+        .list-enter-to {
+            opacity: 1;
+            transform: translateX(0) scaleY(1);
+        }
+
+        .list-leave-active {
+            position: absolute;
+        }
+
+        .list-leave-to {
+            opacity: 0;
+            transform: scaleY(0);
+            transform-origin: center top;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Runtime Visualization</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.22/css/uikit.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.22/js/uikit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.22/js/uikit-icons.min.js"></script>
+
+</head>
+
+<body>
+<!-- Header -->
+<div uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; bottom: #transparent-sticky-navbar">
+    <nav class="uk-navbar-container" uk-navbar
+         style="position: relative; z-index: 980;background-image: linear-gradient(to left, rgb(0, 103, 165), rgb(50, 18, 122));">
+        <div class="uk-navbar-center">
+            <div class="uk-navbar-item uk-logo" style="color: white;">
+                <img src="/static/tensorflow.png" style="height: 1.5rem; vertical-align: text-bottom"/>&nbsp;
+                <span style="font-weight: lighter"> Runtime Tracer </span>
+            </div>
+        </div>
+    </nav>
+</div>
+<div id="app">
+    <!-- Notifications -->
+    <div class="uk-container uk-container-center uk-margin-top" v-if="connection_error">
+        <div class="uk-alert-danger uk-animation-slide-top-medium" uk-alert>
+            <a class="uk-alert-close" uk-close></a>
+            <div class="uk-flex-left uk-flex-middle" uk-grid>
+                <div uk-icon="warning" class="blink_me"></div>
+                <div class="uk-position-center">Connection Error.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="uk-container uk-container-center uk-margin-top" v-if="global_tracing">
+        <div class="uk-alert-warning uk-animation-slide-top-medium" uk-alert>
+            <a class="uk-alert-close" uk-close></a>
+            <div class="uk-flex-left uk-flex-middle" uk-grid>
+                <div uk-icon="warning" class="blink_me"></div>
+                <div class="uk-position-center">Global tracing imposes a significant runtime overhead.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Tracing -->
+    <div class="uk-container">
+        <div class="uk-grid-small uk-flex-right uk-flex-middle uk-margin-bottom uk-margin-top"
+             style="min-height: 3em"
+             uk-grid>
+            <!--Refresh-->
+            <!--style="background-image: linear-gradient(to left, rgb(0, 103, 165), rgb(50, 18, 122));"-->
+
+            <div v-if="!updating" style="min-width: 48px;">
+                <a class="uk-icon-button uk-light"
+                   style="background-color: #0f7ae5;"
+                   uk-icon="refresh"
+                   @click="update_data()" class="uk-margin-small-left"></a>
+            </div>
+            <div v-if="updating" style="min-width: 48px;">
+                <span uk-spinner class="uk-margin-small-left"></span>
+            </div>
+
+            <!--Running Status-->
+            <div v-if="!connection_error">
+                <div v-if="running">
+                    <span style="color: green" class="blink_me"> &#x25BA;</span>
+                    There is an active session.
+                </div>
+
+                <div v-if="!running">
+                    <span style="color: red" class="blink_me"> &#x25cf; </span>
+                    There is no active session.
+                </div>
+            </div>
+
+            <!--Exapnder-->
+            <div class="uk-width-expand"></div>
+
+            <!--Global Tracing-->
+            <div v-if="global_tracing & running">
+                <a class="uk-button-danger uk-button" @click="disable_global_tracing();" style="width: 250px"> Stop
+                    Global Tracing </a>
+            </div>
+            <div v-if="!global_tracing & running">
+                <a class="uk-button-primary uk-button" v-if="!global_tracing" @click="enable_global_tracing();"
+                   style="width: 250px">
+                    Start
+                    Global Tracing </a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Runs -->
+    <div class="uk-container">
+        <div class="uk-grid-small uk-flex-left" uk-grid="masonry: true">
+            <run-card v-for="run in runs" :key="run.run_id" :run="run"></run-card>
+        </div>
+    </div>
+
+    <!-- Kill Server-->
+    <div v-if="!connection_error" class="uk-margin-top">
+        <hr>
+        <div class="uk-container">
+            <div class="uk-grid-small uk-flex-right uk-margin-bottom uk-margin-top" uk-grid>
+                <div>
+                    <a class="uk-button-primary uk-button" href="/save_session" style="width: 250px"> Save Tracing
+                        Session </a>
+                </div>
+
+                <div>
+                    <a class="uk-button-danger uk-button" @click="kill_tracing_server();" style="width: 250px"> Kill
+                        Tracing
+                        Server </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Run Card Template -->
+<template id="run-card-template">
+    <div class="uk-width-1-3@xl uk-width-1-3@l uk-width-1-2@m uk-width-1-2@s uk-animation-slide-top-small">
+        <div class="uk-card uk-card-default uk-card-body uk-box-shadow-bottom uk-box-shadow-large" style="width: 100%">
+            <!-- Session Args -->
+            <dl class="uk-description-list uk-text-small">
+                <dt>Fetches</dt>
+                <dd>{{ run.info.fetches }}</dd>
+                <dt>Feeds</dt>
+                <dd>{{ run.info.feeds }}</dd>
+                <dt>Options</dt>
+                <dd>{{ run.info.options }}</dd>
+            </dl>
+            <hr>
+
+            <!-- Details -->
+            <ul uk-accordion="multiple: true">
+                <!-- Stats -->
+                <li class="uk-close">
+                    <a class="uk-accordion-title" href="#">
+                        Stats <span class="uk-label" uk-tooltip="Number of Runs"
+                                    v-if="run.stats.runs>0">{{ run.stats.runs }}</span>
+                    </a>
+                    <div class="uk-accordion-content">
+                        <dl class="uk-description-list uk-text-small">
+                            <dt>Runs</dt>
+                            <dd>{{ run.stats.runs }}</dd>
+                            <dt>Traces</dt>
+                            <dd>{{ run.stats.traces }}</dd>
+                            <dt>Mean Average Runtime</dt>
+                            <dd>{{ run.stats.runtime_avg }}</dd>
+                            <dt>First Run</dt>
+                            <dd>{{ run.stats.first_run }}</dd>
+                            <dt>Last Run</dt>
+                            <dd>{{ run.stats.last_run }}</dd>
+                        </dl>
+                    </div>
+                </li>
+                <!-- Traces -->
+                <li class="uk-open" v-if="run.traces.length>0">
+                    <a class="uk-accordion-title" href="#">Traces <span class="uk-label uk-label-danger"
+                                                                        uk-tooltip="Number of Traces">{{ run.stats.traces }}</span></a>
+                    <div class="uk-accordion-content">
+                        <p v-if="run.traces.length < run.stats.traces">Showing the last {{ run.traces.length }}
+                            traces.</p>
+                        <ul class="uk-list uk-list-striped">
+                            <!--<transition-group tag="ul" name="list">-->
+                            <li v-for="trace in run.traces" :key="trace.trace_id">
+                                <div class="uk-grid-small uk-text-small" uk-grid>
+                                    <!-- <div class="uk-width-expand"></div> -->
+                                    <div>
+                                        <a uk-icon="download" uk-tooltip="Download as RunMetadata pickle"
+                                           class="uk-icon-link" v-bind:href="trace.download_url"></a>
+                                        <a uk-icon="copy" uk-tooltip="Open Timeline in a new window"
+                                           class="uk-icon-link"
+                                           v-bind:href="trace.url" target="_blank"></a>
+                                    </div>
+                                    <!-- <div class="uk-width-expand"></div> -->
+                                    <div class="uk-margin-small-left">
+                                        <a :href='"#modal-"+run.run_id+"-"+trace.trace_id'
+                                           uk-toggle>{{ trace.title }}</a>
+                                    </div>
+                                </div>
+                                <div :id='"modal-"+run.run_id+"-"+trace.trace_id' class="uk-modal-full" uk-modal>
+                                    <div class="uk-modal-dialog">
+                                        <button class="uk-modal-close-full uk-close-large"
+                                                style="background-color: transparent;" type="button" uk-close></button>
+                                        <div :class='"trace_loading-"+run.run_id+"-"+trace.trace_id' style="min-width: 48px;">
+                                            <span uk-spinner class="uk-position-center"></span>
+                                        </div>
+                                        <iframe :src="trace.url" style="width: 100vw; height: 100vh;" @load="hide_trace_spinner('trace_loading-'+run.run_id+'-'+trace.trace_id);"></iframe>
+                                    </div>
+                                </div>
+                            </li>
+                            <!--</transition-group>-->
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+
+            <!-- Action -->
+            <div v-if="this.$parent.running & !this.$parent.global_tracing">
+                <hr>
+                <div class="uk-flex uk-flex-right" v-if="!run.tracing">
+                    <a class="uk-button-primary uk-button" @click="trace()"> Trace </a>
+                </div>
+                <div class="uk-flex uk-flex-center" v-if="run.tracing">
+                    <span> Tracing </span>
+                    <span uk-spinner class="uk-margin-small-left"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<footer class="uk-light uk-margin-top " style="background-color: #333333;" id="bottom-footer">
+    <div class="uk-grid-small uk-flex-center uk-text-center" uk-grid>
+        <p class="uk-margin-top uk-margin-bottom">By <a href="http://github.com/xldrx">Sayed Hadi Hashemi</a><br/>
+            Licensed under <a href="https://opensource.org/licenses/Apache-2.0">Apache-2.0 license</a>.</p>
+    </div>
+</footer>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

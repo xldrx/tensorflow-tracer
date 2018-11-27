@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'/>
+    <style type="text/css">
+        * {
+            font-family: "Roboto", sans-serif !important;
+        }
+    </style>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+    <meta http-equiv='content-type' content='text/html; charset=utf-8'/>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.22/css/uikit.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.22/js/uikit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.22/js/uikit-icons.min.js"></script>
+
+    <title>{{ title }}</title>
+
+    {{ js_resources|indent(4)|safe }}
+
+    {{ css_resources|indent(4)|safe }}
+
+    {{ plot_script|indent(4)|safe }}
+
+    <style type="text/css">
+        body {
+            height: 100vh;
+        }
+
+        .xl-hidden {
+            visibility: hidden;
+        }
+
+        .xl-sync button:before {
+            content: "\f021 ";
+            display: inline-block;
+            font: normal normal normal 14px/1 FontAwesome;
+            font-size: inherit;
+            text-rendering: auto;
+        }
+
+        .bk-toolbar-box {
+            z-index: 1000;
+        }
+
+
+        .bk-toolbar-above {
+            background-color: rgba(255, 255, 255, 0.85);
+        }
+
+        .xl-box {
+            width: 540px;
+            word-break: break-all;
+            /*white-space: pre-wrap;*/
+        }
+
+        #xl-toolbox .xl-box {
+            width: 100%;
+        }
+
+        #xl-toolbox-parent {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            height: 200px;
+            background-color: pink;
+
+            border: 5px black;
+        }
+
+        #xl-toolbox {
+            height: 100%;
+            width: 100%;
+            overflow: auto;
+
+            font-family: "Roboto", sans-serif;
+            font-weight: 300;
+            font-size: 12px;
+        }
+
+        #xl-toolbox .bk-tooltip-row-label {
+            text-align: right;
+            color: #26aae1; /* blue from toolbar highlighting */
+        }
+
+        {{
+            custom_css | indent(4) | safe
+        }}
+    </style>
+
+    {{ custom_header|indent(4)|safe }}
+</head>
+<body>
+
+<!-- Header -->
+<div>
+    <nav class="uk-navbar-container" uk-navbar style="position: relative; z-index: 980;">
+        <div class="uk-navbar-center">
+            <div class="uk-navbar-item uk-logo" style="color: white;">
+                <span style="font-weight: 300; background-image: linear-gradient(to left, rgb(0, 103, 165), rgb(50, 18, 122)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"> Step Runtime Timeline</span>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            {{ plot_div|indent(4)|safe }}
+        </div>
+    </div>
+    <div class="row" style="height: 100vh">
+    </div>
+
+    <div id="modal-details" uk-modal>
+        <div class="uk-modal-dialog">
+
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+
+            <hr>
+
+            <div class="uk-modal-body" uk-overflow-auto>
+                <div id="xl-toolbox"></div>
+            </div>
+
+            <div class="uk-modal-footer uk-text-right">
+                <button class="uk-button uk-button-primary uk-modal-close" type="button">Done</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        {{ custom_js | indent(4) | safe}}
+    </script>
+</body>
+</html>
