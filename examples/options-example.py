@@ -12,7 +12,7 @@ from tftracer import TracingServer
 SERVER_IP = "0.0.0.0"
 SERVER_PORT = 9999
 KEEP_TRACES = 5
-
+START_WEB_SERVER_ON_START = True
 
 INPUT_SIZE = (299, 299, 3)
 MINIBATCH_SIZE = 128
@@ -41,7 +41,8 @@ def main():
     tracing_server = TracingServer(
         server_ip=SERVER_IP,
         server_port=SERVER_PORT,
-        keep_traces=KEEP_TRACES
+        keep_traces=KEEP_TRACES,
+        start_web_server_on_start = START_WEB_SERVER_ON_START
     )
     estimator.train(input_fn, hooks=[tracing_server.hook])
     estimator.evaluate(input_fn, hooks=[tracing_server.hook])
