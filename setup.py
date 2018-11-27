@@ -4,9 +4,13 @@ import os
 with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "README.md"), "r") as fp:
     long_description = fp.read()
 
+with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "requirements.txt"), "r") as fp:
+    requirements = fp.read().split("\n")
+
+
 setup(
     name='tensorflow-tracer',
-    version='1.0.1',
+    version='1.0.2',
     packages=['tftracer'],
     url='https://github.com/xldrx/tensorflow-tracer',
     license='Apache-2.0',
@@ -26,6 +30,6 @@ setup(
             'tftracer=tftracer.__main__:main',
         ],
     },
-    install_requires=['bokeh>=1.0', "flask", "jinja2", "tensorflow>=1.8", "six", "gevent"],
+    install_requires=requirements,
     package_data={'tftracer': ['resources/*/*']},
 )
