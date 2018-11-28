@@ -25,6 +25,20 @@ Use ``pip`` to install:
 Quick Start
 ===========
 
+#.
+   Install `tensorflow-tracer` and run an example:
+
+      .. code-block:: bash
+
+          $ pip3 install tensorflow-tracer
+          $ git clone https://github.com/xldrx/tensorflow-tracer.git
+          $ python3 ./tensorflow-tracer/examples/estimator-example.py
+
+#.
+   Browse to: ``http://0.0.0.0:9999``
+
+How to Use
+==========
 
 #.
    Add ``tftracer`` to your code:
@@ -50,7 +64,7 @@ Quick Start
              ...
 
 #.
-   Browse to:
+   Run your code and browse to:
 
    .. code-block:: html
 

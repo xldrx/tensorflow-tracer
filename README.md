@@ -15,6 +15,15 @@ pip install tensorflow-tracer
 ```
 
 ## Quick Start
+1. Install `tensorflow-tracer` and run an example:
+    ```html
+    $ pip3 install tensorflow-tracer
+    $ git clone https://github.com/xldrx/tensorflow-tracer.git
+    $ python3 ./tensorflow-tracer/examples/estimator-example.py 
+    ```
+2. Browse to: `http://0.0.0.0:9999` 
+
+## How to Use
 1. Add `tftracer` to your code:
 
     Estimator API:
@@ -37,7 +46,7 @@ pip install tensorflow-tracer
     
     [[More examples here]](https://github.com/xldrx/tensorflow-tracer/blob/master/examples/) 
 
-2. Browse to:
+2. Run your code and browse to:
 ```html
 http://0.0.0.0:9999
 ``` 
