@@ -11,7 +11,8 @@ from tftracer import TracingServer
 INPUT_SIZE = (299, 299, 3)
 MINIBATCH_SIZE = 128
 NUM_CLASSES = 1000
-NUM_STEPS = 100
+NUM_STEPS = 500
+
 
 def input_fn():
     dataset = tf.data.Dataset.from_tensor_slices([0]).repeat(MINIBATCH_SIZE)

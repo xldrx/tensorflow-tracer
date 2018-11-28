@@ -17,7 +17,7 @@ START_WEB_SERVER_ON_START = True
 INPUT_SIZE = (299, 299, 3)
 MINIBATCH_SIZE = 128
 NUM_CLASSES = 1000
-NUM_STEPS = 40
+NUM_STEPS = 500
 
 def input_fn():
     dataset = tf.data.Dataset.from_tensor_slices([0]).repeat(MINIBATCH_SIZE)
