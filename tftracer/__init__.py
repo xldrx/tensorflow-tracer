@@ -5,5 +5,5 @@ __author__ = 'Sayed Hadi Hashemi'
 
 from .timeline import Timeline
 from .tracing_server import TracingServer
-
-__version__ = '1.0.2'
+from .monkey_patching import hook_inject
+from .version import __version__

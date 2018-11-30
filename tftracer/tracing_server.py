@@ -17,7 +17,7 @@ import flask
 import threading
 from .timeline import Timeline
 import tensorflow as tf
-
+from .version import __version__
 
 class VisualizationServerBase:
     def __init__(self, server_port=9999, server_ip="0.0.0.0", **kwargs):
@@ -170,6 +170,7 @@ class VisualizationServer(VisualizationServerBase):
 
 
 class TracingSource:
+    tftracer_version = __version__
 
     def __init__(self, **kwargs):
         self._run_profile = OrderedDict()

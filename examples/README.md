@@ -9,6 +9,11 @@ Example of using `tftracer.TracingServer` with TensorFlow ``estimator`` API.
 [monitoredtrainingsession-example.py](https://github.com/xldrx/tensorflow-tracer/blob/master/examples/monitoredtrainingsession-example.py)
 <br/>
 Example of using `tftracer.TracingServer` with TensorFlow `MonitoredTrainingSession` API.
+
+### Monkey Patching
+[monkey_patching-example.py](https://github.com/xldrx/tensorflow-tracer/blob/master/examples/monkey_patching-example.py)
+<br/>
+Example of using `tftracer.hook_inject` to trace a script without any modifications.
    
 ### Horovod: One Process
 [horovod-example.py](https://github.com/xldrx/tensorflow-tracer/blob/master/examples/horovod-example.py)
