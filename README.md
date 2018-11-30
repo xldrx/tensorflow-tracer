@@ -51,6 +51,20 @@ pip install tensorflow-tracer
 http://0.0.0.0:9999
 ``` 
 
+## How to Trace an Existing Code
+
+If you want to trace an existing script without any modification use `tftracer.hook_inject`
+Please note that this is experimental and may cause unexpected errors:
+
+1. Add the following to the beggining of the main script:
+   .. code-block:: python
+
+       import tftracer
+       tftracer.hook_inject()
+       ...
+2. Run your code and browse to `http://0.0.0.0:9999`
+
+
 ## Command line
 Tracing sessions can be stored either through the web interface or by calling `tracing_server.save_session(filename)`.
 

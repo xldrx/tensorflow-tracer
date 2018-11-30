@@ -1,6 +1,6 @@
 from setuptools import setup
 import os
-
+from tftracer.version import __version__
 with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "README.md"), "r") as fp:
     long_description = fp.read()
 
@@ -10,7 +10,7 @@ with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "requirement
 
 setup(
     name='tensorflow-tracer',
-    version='1.0.2',
+    version=__version__,
     packages=['tftracer'],
     url='https://github.com/xldrx/tensorflow-tracer',
     license='Apache-2.0',

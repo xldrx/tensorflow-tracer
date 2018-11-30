@@ -17,6 +17,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath('..'))
 
+from tftracer.version import __version__
 # -- Project information -----------------------------------------------------
 
 project = 'TensorFlow Runtime Tracer'
@@ -24,9 +25,9 @@ copyright = '2018, Sayed Hadi Hashemi'
 author = 'Sayed Hadi Hashemi'
 
 # The short X.Y version
-version = '1.0.2'
+version = __version__
 # The full version, including alpha/beta/rc tags
-release = '1.0.2'
+release = __version__
 
 
 # -- General configuration ---------------------------------------------------

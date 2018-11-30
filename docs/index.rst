@@ -70,6 +70,30 @@ How to Use
 
       http://0.0.0.0:9999
 
+How to Trace an Existing Code
+=============================
+
+If you want to trace an existing script without any modification use :func:`tftracer.hook_inject`. Please note that
+this is experimental and may cause unexpected errors:
+
+#.
+   Add the following to the beggining of the main script:
+
+   .. code-block:: python
+
+      import tftracer
+      tftracer.hook_inject()
+      ...
+
+
+#.
+   Run your code and browse to:
+
+   .. code-block:: html
+
+      http://0.0.0.0:9999
+
+
 Command line
 ============
 
@@ -111,6 +135,9 @@ Examples
    Low-Level API <`monitoredtrainingsession-example.py <https://github.com/xldrx/tensorflow-tracer/blob/master/examples/monitoredtrainingsession-example.py>`__>
       Example of using :class:`tftracer.TracingServer` with TensorFlow ``MonitoredTrainingSession`` API.
 
+   Monkey Patching <`monkey_patching-example.py <https://github.com/xldrx/tensorflow-tracer/blob/master/examples/monkey_patching-example.py>`__>
+      Example of using :func:`tftracer.hook_inject` to trace a script without any modifications.
+
    Horovod: One Process <`horovod-example.py <https://github.com/xldrx/tensorflow-tracer/blob/master/examples/horovod-example.py>`__>
       Example of using :class:`tftracer.TracingServer` with ``horovod``. In this example only the one process is being traced.
 
@@ -145,6 +172,10 @@ tftracer.Timeline
     :undoc-members:
     :exclude-members: communication_elapsed_time, communication_time, computation_time
 
+tftracer.hook_inject
+--------------------
+.. automodule:: tftracer
+    :members: hook_inject
 
 
 Known Bugs/Limitations
